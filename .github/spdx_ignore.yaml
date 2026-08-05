@@ -20,3 +20,6 @@ ignore:
     - models/demos/t3000/llama2_70b/reference/
     - infra/
     - models/demos/deepseek_v3/reference/deepseek/
+
+    - tt_metal/hw/ckernels/blackhole/metal/llk_api/llk_sfpu/ckernel_sfpu_i0.h
+    - tt_metal/hw/ckernels/wormhole_b0/metal/llk_api/llk_sfpu/ckernel_sfpu_i0.h
