@@ -1,0 +1,12 @@
+name: Bounty - Gemma-2
+on:
+  pull_request:
+    paths:
+      - models/tt_transformers/demos/gemma2*
+      - tests/tt_transformers/test_gemma2*
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo Gemma-2 CI placeholder
