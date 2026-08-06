@@ -1,0 +1,12 @@
+name: Bounty - Blackhole Dest Reuse
+on:
+  pull_request:
+    paths:
+      - tt_metal/impl/dispatch/kernels/*
+      - tests/tt_metal/test_blackhole_dest_reuse*
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo Blackhole CI placeholder
