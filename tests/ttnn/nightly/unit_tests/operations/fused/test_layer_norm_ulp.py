@@ -272,10 +272,9 @@ _FP32_NEAR_ZERO_ATOL_FRACTION = 0.004
 def test_layer_norm_ulp_fp32_no_weight_bias(device, h, w, desc, use_welford, distribution):
     """FP32 layer_norm ULP vs torch float32 golden (no weight/bias); fp32_dest_acc_en=True only."""
     if is_blackhole() and use_welford and w == 4096:
-        # The large-tensor Welford layer_norm kernels produce nondeterministic FP32 output on
-        # Blackhole (back-to-back runs differ; failure disappears under watcher), so the
-        # determinism check in ttnn_layer_norm trips. Tracked in issue #46523.
-        pytest.skip("Blackhole large-tensor Welford layer_norm is nondeterministic (FP32); see #46523")
+        # Note: Previously skipped due to nondeterministic FP32 output (issue #46523).
+        # Fix #52252 adds destination-reuse synchronization — re-enabled for validation.
+        pass
     torch.manual_seed(0)
     torch_input_tensor = _make_ln_input(h, w, torch.float32, distribution)
     golden = torch.nn.functional.layer_norm(torch_input_tensor, normalized_shape=[w])
@@ -309,10 +308,9 @@ def test_layer_norm_ulp_fp32_with_weight_bias(device, h, w, desc, use_welford, d
       "bias_only"   – bias only, weight=None
     """
     if is_blackhole() and use_welford and w == 4096:
-        # The large-tensor Welford layer_norm kernels produce nondeterministic FP32 output on
-        # Blackhole (back-to-back runs differ; failure disappears under watcher), so the
-        # determinism check in ttnn_layer_norm trips. Tracked in issue #46523.
-        pytest.skip("Blackhole large-tensor Welford layer_norm is nondeterministic (FP32); see #46523")
+        # Note: Previously skipped due to nondeterministic FP32 output (issue #46523).
+        # Fix #52252 adds destination-reuse synchronization — re-enabled for validation.
+        pass
     torch.manual_seed(0)
     torch_input_tensor = _make_ln_input(h, w, torch.float32, distribution)
     torch_weight = torch.rand((w,), dtype=torch.float32) if wb_mode in ("wb", "weight_only") else None

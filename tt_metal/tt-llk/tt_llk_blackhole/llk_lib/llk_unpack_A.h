@@ -185,6 +185,17 @@ inline void _llk_unpack_A_mop_config_(
         {
             if constexpr (acc_to_dest)
             {
+                // Fix #52252: Synchronization barrier for destination reuse.
+                // When acc_to_dest is true and destination is reused as source,
+                // the unpacker must wait for the math engine to complete writing
+                // to the destination register. Without this stall, a timing-
+                // sensitive race causes nondeterministic FP32 Welford layernorm
+                // output on Blackhole hardware (issue #46523).
+                if constexpr (binary_reuse_dest != EltwiseBinaryReuseDestType::NONE)
+                {
+                    TTI_STALLWAIT(p_stall::STALL_SYNC, p_stall::STALL_MATH);
+                }
+
                 static constexpr std::uint32_t unpack_srca_reuse =
                     (binary_reuse_dest == EltwiseBinaryReuseDestType::DEST_TO_SRCA) ? unpack_srca_set_dvalid : unpack_srca;
 
